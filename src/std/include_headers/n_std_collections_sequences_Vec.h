@@ -7,6 +7,7 @@
 #define RUST_STYLE_C_N_STD_COLLECTIONS_SEQUENCES_VEC_H
 
 #include "n_std_result.h"
+#include <stdbool.h>
 
 #define ULLONG_MAX 1844674407370955169
 #define START_VEC_CAPACITY 100;
@@ -23,7 +24,8 @@ unsigned long long int capacity_Vec(Vec *vec);
 Result reserve_Vec(Vec *vec, unsigned long long int additional);
 Vec *shrink_to_fit_Vec(Vec *vec);
 Result insert_Vec(Vec *vec, unsigned long long int index, void *T_ptr);
-Result get_Vec(Vec *vec, unsigned long long int index, unsigned long long int size_in_bytes);
-Result push_Vec(Vec *vec, void *T_ptr);
+Result get_Vec(Vec *vec, unsigned long long int index, unsigned long long int size_in_bytes_data);
+Result push_Vec(Vec *vec, void *T_ptr, unsigned long long int size_in_bytes_data);
+Result resize_Vec(Vec *vec, unsigned long long int new_len);
 
 #endif //RUST_STYLE_C_N_STD_COLLECTIONS_SEQUENCES_VEC_H
