@@ -2,30 +2,32 @@
 // Created by pinkod on 20.06.2024.
 //
 #include "../std/include_headers/n_std.h"
+#include <stdlib.h>
 
-struct foo {
-    int a;
-    double b;
-    char c[10];
-};
+typedef struct {
+    int i;
+    double ii;
+    char iii[100];
+} foo;
 
 int main() {
-    struct foo abc = {.a = 10, .b = 20.22, .c = "abcde12345"};
-    printf("abc:\na=%d\nb=%f\nc=%s\n", abc.a, abc.b, abc.c);
-    struct foo def = {.a = 99, .b = 44.55, .c = "defgh78910"};
-    printf("def:\na=%d\nb=%f\nc=%s\n\n", def.a, def.b, def.c);
-    //Result result1 = with_capacity_Vec(10, sizeof(struct foo));
-    Vec *vec = new_Vec();
-    Result push_res;
-    push_res = push_Vec(vec, &abc, sizeof(struct foo));
-    if(push_res.res == Ok) printf("Ok1\n");
-    push_res = push_Vec(vec, &def, sizeof(struct foo));
-    if(push_res.res == Ok) printf("Ok2\n");
-    Result result2 = get_Vec(vec, 1, sizeof (struct foo));
-    if(result2.res == Ok) {
-        struct foo *ABC = (struct foo*)result2.ptr;
-        printf("a=%d\nb=%f\nc=%s\n", ABC->a, ABC->b, ABC->c);
+    Vec *vec = new_Vec(sizeof(foo));
+
+    
+    for(int i = 0; i < 333; i++) {
+        foo j = {.i= i, .ii = 0.9 * i};
+        sprintf(j.iii, "%d", i);
+        Result res = push_Vec(vec, &j);
+        if(res.res == Err) {
+            printf("error code: %d\niteration: %d", res.err_code, i);
+        }
     }
-    else printf("error code2: %d\n", result2.err_code);
+
+    for(int i = 0; i < (int)length_Vec(vec); i++) {
+        Result res = get_Vec(vec, i);
+        if(res.res == Err) continue;
+        foo j = *(foo*)res.ptr;
+        printf("%3d)    a=%3d    b=%3f    c=%s\n", i, j.i, j.ii, j.iii);
+    }
     return 0;
 }

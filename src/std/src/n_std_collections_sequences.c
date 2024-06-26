@@ -9,13 +9,15 @@
 #include "string.h"
 
 
+//if function new_Vec returns NULL, means allocation is failed
 
-Vec *new_Vec(){
+Vec *new_Vec(unsigned long long int size_in_bytes_data){
     Vec *vec = malloc(sizeof (Vec));
     if(vec != NULL) {
         vec->length = 0;
         vec->capacity = 0;
         vec->ptr_to_first_elem = NULL;
+        vec->size_in_bytes_data = size_in_bytes_data;
     }
     return vec;
 }
@@ -23,7 +25,7 @@ Vec *new_Vec(){
 
 //error codes function with_capacity_Vec:
 //1 allocation error
-Result with_capacity_Vec(unsigned long long int size, unsigned long long int size_in_bytes) {
+Result with_capacity_Vec(unsigned long long int size, unsigned long long int size_in_bytes_data) {
     Vec *vec = malloc(sizeof (Vec));
     Result result;
     if(vec != NULL) {
@@ -34,7 +36,7 @@ Result with_capacity_Vec(unsigned long long int size, unsigned long long int siz
             result.res = Ok;
         }
         else {
-            vec->ptr_to_first_elem = malloc(size_in_bytes * size);
+            vec->ptr_to_first_elem = malloc(size_in_bytes_data * size);
             if(vec->ptr_to_first_elem == NULL) {
                 free(vec);
                 result.res = Err;
@@ -50,6 +52,7 @@ Result with_capacity_Vec(unsigned long long int size, unsigned long long int siz
         result.res = Err;
         result.err_code = 1;
     }
+    vec->size_in_bytes_data = size_in_bytes_data;
     result.ptr = vec;
     return result;
 }
@@ -76,7 +79,7 @@ Result reserve_Vec(Vec *vec, unsigned long long int additional) {
         result.err_code = 2;
         return result;
     }
-    void *realloc_ptr = realloc(vec->ptr_to_first_elem, (vec->capacity + additional) * sizeof (*vec->ptr_to_first_elem));
+    void *realloc_ptr = realloc(vec->ptr_to_first_elem, (vec->capacity + additional) * vec->size_in_bytes_data);
     if(realloc_ptr == NULL){
         result.res = Err;
         result.err_code = 1;
@@ -93,7 +96,7 @@ Result reserve_Vec(Vec *vec, unsigned long long int additional) {
 
 Vec *shrink_to_fit_Vec(Vec *vec) {
     if(vec == NULL || vec->capacity == 0) return vec;
-    vec->ptr_to_first_elem = realloc(vec->ptr_to_first_elem, vec->length * sizeof (*vec->ptr_to_first_elem));
+    vec->ptr_to_first_elem = realloc(vec->ptr_to_first_elem, vec->length * vec->size_in_bytes_data);
     return vec;
 }
 
@@ -116,8 +119,8 @@ Result insert_Vec(Vec *vec, unsigned long long int index, void *T_ptr) {
     }
     result.res = Ok;
     void *ptr = vec->ptr_to_first_elem;
-    ptr = (void*)((char*)ptr + (sizeof (T_ptr)) * index);
-    ptr = memcpy(ptr, T_ptr, sizeof (*T_ptr));
+    ptr = (void*)((char*)ptr + vec->size_in_bytes_data * index);
+    ptr = memcpy(ptr, T_ptr, vec->size_in_bytes_data);
     return result;
 }
 
@@ -125,7 +128,7 @@ Result insert_Vec(Vec *vec, unsigned long long int index, void *T_ptr) {
 //error codes function get_Vec:
 //1 vec is NULL
 //2 index is greater than vec length
-Result get_Vec(Vec *vec, unsigned long long int index, unsigned long long int size_in_bytes_data) {
+Result get_Vec(Vec *vec, unsigned long long int index) {
     Result result;
     if(vec == NULL) {
         result.res = Err;
@@ -139,7 +142,7 @@ Result get_Vec(Vec *vec, unsigned long long int index, unsigned long long int si
     }
     result.res = Ok;
     void *ptr = vec->ptr_to_first_elem;
-    ptr = (void*)((char*)ptr + size_in_bytes_data * index);
+    ptr = (void*)((char*)ptr + vec->size_in_bytes_data * index);
     result.ptr = ptr;
     return result;
 }
@@ -148,7 +151,7 @@ Result get_Vec(Vec *vec, unsigned long long int index, unsigned long long int si
 //1 vec is NULL
 //2 vec capacity is more than max size of usingned long long int of items
 //3 allocation fail
-Result push_Vec(Vec *vec, void *T_ptr, unsigned long long int size_in_bytes_data) {
+Result push_Vec(Vec *vec, void *T_ptr) {
     Result result;
     result.ptr = vec;
     if(vec == NULL) {
@@ -166,8 +169,8 @@ Result push_Vec(Vec *vec, void *T_ptr, unsigned long long int size_in_bytes_data
         vec = result.ptr;
     }
     void *ptr = vec->ptr_to_first_elem;
-    ptr = (void*)((char*)ptr + size_in_bytes_data * (vec->length));
-    ptr = memcpy(ptr, T_ptr, size_in_bytes_data);
+    ptr = (void*)((char*)ptr + vec->size_in_bytes_data * vec->length);
+    ptr = memcpy(ptr, T_ptr, vec->size_in_bytes_data);
     vec->length += 1;
     result.res = Ok;
     return result;
@@ -215,8 +218,8 @@ Result resize_Vec(Vec *vec, unsigned long long int new_len) {
     if(less_than_now == true) temp_vec_capacity = vec->capacity - additional;
     else temp_vec_capacity = vec->capacity + additional; 
 
-    if(less_than_now == true) temp_realloc_ptr = realloc(vec->ptr_to_first_elem , sizeof(*vec->ptr_to_first_elem) * (vec->capacity - additional));
-    else temp_realloc_ptr = realloc(vec->ptr_to_first_elem , sizeof(*vec->ptr_to_first_elem) * (vec->capacity + additional));
+    if(less_than_now == true) temp_realloc_ptr = realloc(vec->ptr_to_first_elem , vec->size_in_bytes_data * (vec->capacity - additional));
+    else temp_realloc_ptr = realloc(vec->ptr_to_first_elem , vec->size_in_bytes_data * (vec->capacity + additional));
     if (temp_realloc_ptr == NULL) {
         result.res = Err;
         result.err_code = 3;
@@ -228,7 +231,10 @@ Result resize_Vec(Vec *vec, unsigned long long int new_len) {
     return result;
 }
 
-
+unsigned long long int length_Vec(Vec *vec) {
+    if(vec != NULL) return vec->length;
+    return 0;
+}
 
 
 
