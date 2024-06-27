@@ -1,6 +1,9 @@
 //
 // Created by pinkod on 24.06.2024.
 //
+//testing not done, may be logical errors
+
+
 #include "./../include_headers/n_std_collections_sequences_Vec.h"
 
 #include "stdlib.h"
@@ -20,6 +23,7 @@ Vec *new_Vec(unsigned long long int size_in_bytes_data, void (*free_item_functio
     return vec;
 }
 
+//create a new, empty Vec, with at least the specified capacity.
 //error codes function with_capacity_Vec:
 //1 allocation error
 Result with_capacity_Vec(unsigned long long int size, unsigned long long int size_in_bytes_data, void (*free_item_function_ptr)(void *ptr)) {
@@ -418,7 +422,20 @@ Result append_Vec(Vec *vec_dest, Vec *vec_src, ...) {
     return result;
 }
 
-
+void delete_Vec(Vec *vec) {
+    if(vec->free_item_function_ptr == NULL) {
+        free(vec->ptr_to_first_elem);
+    }
+    else {
+        for(unsigned long long int i = 0; i < vec->capacity; i++) {
+            Result res_get = get_Vec(vec, i);
+            if(res_get.res == Ok) {
+                vec->free_item_function_ptr(res_get.ptr);
+            }
+        }
+    }
+    free(vec);
+}
 
 
 
