@@ -18,7 +18,9 @@ typedef struct {
     char *ptr_to_first_char;
 } String;
 
-Result from_String(char *str);
-
+Result from_String(char *str, unsigned long long int size);
+Result new_String();
+Result with_capacity_String(unsigned long long int size);
+Result to_raw_str_String(String *string, unsigned long long int str_size, char *str);
 
 #endif //RUST_STYLE_C_N_STD_STRING_H

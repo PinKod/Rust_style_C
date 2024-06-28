@@ -44,7 +44,7 @@ FILE=$(find . -type f -name "$SEARCH_PATTERN" | head -n 1)
 #echo $FILE
 # Check if the file was found
 if [ -f "$FILE" ]; then
-    #echo "Found file: $FILE"
+#echo "Found file: $FILE"
         counter=1
         while true
         do
@@ -61,6 +61,14 @@ if [ -f "$FILE" ]; then
                 # Exit the script with an error status
                 exit 0
             else
+                if grep -q "error" $TEMP_FILE ; then
+                  echo
+                  echo "Test $counter compilation failed with error:"
+                  echo
+                  cat $TEMP_FILE
+                  rm $TEMP_FILE
+                  exit 0
+                fi
                 # Remove the temporary file
                 rm $TEMP_FILE
             fi
@@ -70,6 +78,7 @@ if [ -f "$FILE" ]; then
                 echo "Test $counter"
                 echo
                 ./output
+                echo "Test $counter passed"
                 echo
                 rm output
                 else
