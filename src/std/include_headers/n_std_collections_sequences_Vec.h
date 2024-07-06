@@ -35,5 +35,6 @@ Result pop_Vec(Vec *vec);
 Result sort_Vec(Vec *vec, bool (*func_comparison_ptr_if_first_bigger)(void *ptr1, void *ptr2));
 Result append_Vec(Vec *vec_dest, Vec *vec_src, ...);
 void delete_Vec(Vec *vec);
+Result copy_Vec(Vec *vec);
 
 #endif //RUST_STYLE_C_N_STD_COLLECTIONS_SEQUENCES_VEC_H

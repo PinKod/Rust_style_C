@@ -168,3 +168,81 @@ int main() {
     return 0;
 }
 #endif
+
+Result push_str_String(String *dest, String *src) {
+    if(dest == NULL) {
+        Result res = {.res = Err, .err_code = 1};
+        return res;
+    }
+    if(src == NULL || src->length == 0) {
+        Result res = {.res = Ok, .ptr = dest};
+        return res;
+    }
+    unsigned long long int u_l_l_m = ULLONG_MAX;
+    if(u_l_l_m - dest->length < src->length) {
+        Result res = {.res = Err, .err_code = 3, .ptr = dest};
+        return res;
+    }
+    if(dest->length + src->length > dest->capacity) {
+        unsigned long long int s_s_c = START_STRING_CAPACITY;
+        char *temp_char_ptr = realloc(dest->ptr_to_first_char, dest->length + src->length + s_s_c);
+        if(temp_char_ptr == NULL) {
+            temp_char_ptr = realloc(dest->ptr_to_first_char, dest->length + src->length);
+            if (temp_char_ptr == NULL) {
+                Result res = {.res = Err, .err_code = 2};
+                return res;
+            } else {
+                dest->capacity = dest->length + src->length;
+            }
+        }
+        else{
+            dest->capacity = dest->length + src->length + s_s_c;
+        }
+    }
+    dest->ptr_to_first_char = temp_char_ptr;
+    memccpy(dest->ptr_to_first_char[dest->length], src->ptr_to_first_char, sizeof (char) * src->length);
+    dest->length += src->length;
+    Result res = {.res = Ok, .ptr = dest};
+    return res;
+}
+
+void clear_String(String *string) {
+    if(string == NULL || string->capacity == 0 || || string->length == 0) return;
+    string->length = 0;
+}
+
+Result copy_String(String *string) {
+    if(string == NULL) {
+        Result res = {.res = Err, .err_code = 1};
+        return res;
+    }
+    Result w_c_r = with_capacity_String(string->capacity);
+    if(w_c_r.res == Err && w_c_r.err_code == 1) {
+        w_c_r = with_capacity_String(string->length);
+        if (w_c_r.res == Err && w_c_r.err_code == 1) {
+            Result res = {.res = Err, .err_code = 2};
+            return res;
+        }
+    }
+    String *new_string = w_c_r.ptr;
+    new_string->length = string->length;
+    memccpy(new_string->ptr_to_first_char, string->ptr_to_first_char, sizeof (char ) * string->length);
+    Result res = {.res = Ok, .ptr = new_string};
+    return res;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

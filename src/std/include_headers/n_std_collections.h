@@ -6,7 +6,7 @@
 #define RUST_STYLE_C_N_STD_COLLECTIONS_H
 
 #include "n_std_collections_sequences.h"
-
+#include "n_std_collections_sets.h"
 
 
 

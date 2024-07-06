@@ -437,6 +437,28 @@ void delete_Vec(Vec *vec) {
     free(vec);
 }
 
+Result copy_Vec(Vec *vec) {
+    if(vec == NULL) {
+        Result res = {.res = Err, .err_code = 1};
+        return res;
+    }
+    Result w_c_v = with_capacity_Vec(vec->capacity, vec->size_in_bytes_data, vec->free_item_function_ptr);
+    if(w_c_v.res == Err && w_c_v.err_code == 1) {
+        w_c_v = with_capacity_Vec(vec->length, vec->size_in_bytes_data, vec->free_item_function_ptr);
+        if (w_c_v.res == Err && w_c_v.err_code == 1) {
+            Result res = {.res = Err, .err_code = 2};
+            return res;
+        }
+    }
+    Vec *new_vec = w_c_v.ptr;
+    new_vec->length = vec->length;
+    memccpy(new_vec->ptr_to_first_elem, vec->ptr_to_first_elem, vec->size_in_bytes_data * vec->length);
+    Result res = {.res = Ok, .ptr = new_vec};
+    return res;
+}
+
+
+
 
 
 

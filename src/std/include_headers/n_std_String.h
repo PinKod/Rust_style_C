@@ -22,5 +22,8 @@ Result from_String(char *str, unsigned long long int size);
 Result new_String();
 Result with_capacity_String(unsigned long long int size);
 Result to_raw_str_String(String *string, unsigned long long int str_size, char *str);
+Result push_str_String(String *dest, String *src);
+void clear_String(String *string);
+Result copy_String(String *string);
 
 #endif //RUST_STYLE_C_N_STD_STRING_H
