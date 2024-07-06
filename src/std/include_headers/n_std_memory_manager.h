@@ -11,6 +11,6 @@ typedef struct {
     Vec *vec;
 } Memory_Manager;
 
-Memory_Manager memory_manager_new();
+Memory_Manager memory_manager_init();
 
 #endif //RUST_STYLE_C_N_STD_MEMORY_MANAGER_H
