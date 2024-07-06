@@ -4,7 +4,7 @@
 #include "stdio.h"
 #include "../std/include_headers/n_std_memory_manager.h"
 #include "assert.h"
-#include "../std/include_headers/global_variables.h"
+
 extern Memory_Manager global_memory_manager;
 
 void test() {

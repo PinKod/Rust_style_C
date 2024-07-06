@@ -6,7 +6,6 @@
 #define RUST_STYLE_C_GLOBAL_VARIABLES_H
 
 #include "n_std_memory_manager.h"
-Memory_Manager global_memory_manager;
 
 
 #endif //RUST_STYLE_C_GLOBAL_VARIABLES_H
