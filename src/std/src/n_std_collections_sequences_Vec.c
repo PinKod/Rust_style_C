@@ -19,6 +19,9 @@ Vec *new_Vec(unsigned long long int size_in_bytes_data, void (*free_item_functio
         vec->ptr_to_first_elem = NULL;
         vec->size_in_bytes_data = size_in_bytes_data;
         vec->free_item_function_ptr = free_item_function_ptr;
+#ifdef MEMORY_MANAGER
+
+#endif
     }
     return vec;
 }

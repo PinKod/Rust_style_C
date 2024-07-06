@@ -5,6 +5,7 @@
 #ifndef RUST_STYLE_C_N_STD_COLLECTIONS_SETS_HASHMAP_H
 #define RUST_STYLE_C_N_STD_COLLECTIONS_SETS_HASHMAP_H
 
+//struct HashMap;
 typedef struct {
 
 } HashMap;

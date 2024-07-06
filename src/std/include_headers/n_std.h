@@ -8,7 +8,7 @@
 #include "n_std_collections.h"
 #include "n_std_result.h"
 #include "n_std_String.h"
-
+#include "n_std_memory_manager.h"
 
 
 
